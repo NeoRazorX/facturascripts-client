@@ -25,11 +25,12 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 		global api_url
 		response = urllib2.urlopen(api_url+'?remote-printer=TRUE')
 		html = response.read()
-		f = open('ticket.txt', 'w')
-		f.write(html+"\n")
-		f.close()
-		global printer_name
-		call(['lpr', '-P', printer_name, 'ticket.txt'])
+		if html != '':
+			f = open('ticket.txt', 'w')
+			f.write(html+"\n")
+			f.close()
+			global printer_name
+			call(['lpr', '-P', printer_name, 'ticket.txt'])
 
 if __name__ == '__main__':
 	# preguntamos por la configuración
