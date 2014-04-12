@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- encoding: utf-8 -*-
 #
 # Author: Carlos Garcia Gomez
@@ -53,13 +53,13 @@ if __name__ == '__main__':
 	# iniciamos el servidor web
 	server_class = BaseHTTPServer.HTTPServer
 	httpd = server_class((HOST_NAME, PORT_NUMBER), MyHandler)
-	print time.asctime(), "Server Starts - %s:%s" % (HOST_NAME, PORT_NUMBER)
+	print( time.asctime(), "Server Starts - %s:%s" % (HOST_NAME, PORT_NUMBER) )
 	try:
 		httpd.serve_forever()
 	except KeyboardInterrupt:
 		pass
 	httpd.server_close()
-	print time.asctime(), "Server Stops - %s:%s" % (HOST_NAME, PORT_NUMBER)
+	print( time.asctime(), "Server Stops - %s:%s" % (HOST_NAME, PORT_NUMBER) )
 
 	# borramos el ticket
 	if os.path.isfile('ticket.txt'):
