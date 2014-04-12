@@ -5,13 +5,14 @@
 # Date: 29-11-2013
 # web: http://www.facturaScripts.com
 
-import time, BaseHTTPServer, urllib2, os
+import time, http.server, os
+from urllib.request import urlopen
 from subprocess import call
 
 HOST_NAME = 'localhost'
 PORT_NUMBER = 10080
 
-class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+class MyHandler(http.server.BaseHTTPRequestHandler):
 	def do_HEAD(s):
 		s.send_response(200)
 		s.send_header("Content-type", "text/html")
@@ -23,11 +24,11 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 		s.end_headers()
 		
 		global api_url
-		response = urllib2.urlopen(api_url+'?remote-printer=TRUE')
+		response = urlopen(api_url+'?remote-printer=TRUE')
 		html = response.read()
 		if html != '':
-			f = open('ticket.txt', 'w')
-			f.write(html+"\n")
+			f = open('ticket.txt', 'wb')
+			f.write( html + b'\n' )
 			f.close()
 			global printer_name
 			call(['lpr', '-P', printer_name, 'ticket.txt'])
@@ -44,14 +45,14 @@ if __name__ == '__main__':
 		printer_name = line[9:].rstrip()
 		f.close()
 	else:
-		api_url = raw_input('URL de la api: ')
-		printer_name = raw_input('Nombre de la impresora: ')
+		api_url = input('URL de la api: ')
+		printer_name = input('Nombre de la impresora: ')
 		f = open('config.txt', 'w')
 		f.write('api: '+api_url+"\nprinter: "+printer_name)
 		f.close()
 
 	# iniciamos el servidor web
-	server_class = BaseHTTPServer.HTTPServer
+	server_class = http.server.HTTPServer
 	httpd = server_class((HOST_NAME, PORT_NUMBER), MyHandler)
 	print( time.asctime(), "Server Starts - %s:%s" % (HOST_NAME, PORT_NUMBER) )
 	try:
