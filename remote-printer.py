@@ -23,7 +23,10 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 		s.end_headers()
 		
 		global api_url
-		response = urllib2.urlopen(api_url+'?remote-printer=TRUE')
+		extra_url = ''
+		if len(s.path) > 2:
+			extra_url = '&'+s.path[2:]
+		response = urllib2.urlopen(api_url+'?v=2&f=remote_printer'+extra_url)
 		html = response.read()
 		if html != '':
 			f = open('ticket.txt', 'w')
