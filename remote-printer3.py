@@ -29,7 +29,7 @@ class MyHandler(http.server.BaseHTTPRequestHandler):
 			extra_url = '&'+s.path[2:]
 		response = urlopen(api_url+'?v=2&f=remote_printer'+extra_url)
 		html = response.read()
-		if html != '':
+		if html:
 			f = open('ticket.txt', 'wb')
 			f.write( html + b'\n' )
 			f.close()
